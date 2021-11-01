@@ -6,4 +6,4 @@
 # Member
 1) Kasita Sansanthad 64011426  
 2) Pantila Kosalaraksa 64011517  
-3) Thient Nandarsu 64011752  
+3) Theint Nandarsu 64011752  
