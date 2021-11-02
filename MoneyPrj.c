@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
+#include<stdbool.h>
 
 // necessay information
 struct date
@@ -25,6 +25,10 @@ struct item_info
     int price;
 };
 
+struct saving
+{
+    bool week = false, day = false;
+};
     
 int main()
 {   
