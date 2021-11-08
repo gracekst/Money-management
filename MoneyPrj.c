@@ -25,13 +25,11 @@ struct item_info
     int price;
 };
 
-struct saving
-{
-    bool week = false, day = false;
-};
     
 int main()
 {   
+    bool week = false;
+    bool day = false;
 
     // opening a file
     FILE *fptr = fopen("MoneyProject.txt", "w+");
