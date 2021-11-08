@@ -32,6 +32,8 @@ int main()
     bool week = false;
     bool day = false;
 
+    char save_type[50];
+
     // opening a file
     FILE *fptr = fopen("MoneyProject.txt", "w+");
 
@@ -110,7 +112,24 @@ int main()
     printf("The total price for all items: %d", total_price);
     fprintf(fptr,"The total price for all itmes: %d\n", total_price);
 
+    printf("How would you like to save? (type week/day): ");
+    scanf("%s", &save_type);
+
+    if(save_type == "week")
+    {
+        //code
+    }
+
+    else if (save_type == "day")
+    {
+        //code
+    }
+    
+    else
+    {
+        // code
+    }
+
     return 0;
 }
     
-
