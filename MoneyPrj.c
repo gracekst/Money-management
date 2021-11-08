@@ -3,11 +3,12 @@
 #include<string.h>
 #include<stdbool.h>
 
+
 // necessay information
 struct date
 {
     int day;
-    char month[15];
+    int month;
     int year;
 
 };
@@ -49,7 +50,7 @@ int main()
     scanf("%d", &dt.day);
 
     printf("Enter Month: ");
-    scanf("%s", &dt.month);
+    scanf("%d", &dt.month);
 
     printf("Enter Year: ");
     scanf("%d", &dt.year);
@@ -84,7 +85,7 @@ int main()
 
     fputs("---Date & Time that the user will buy his items---\n", fptr);
     fprintf(fptr,"Day: %2d\n", dt.day);
-    fprintf(fptr,"Month: %s\n", dt.month);
+    fprintf(fptr,"Month: %d\n", dt.month);
     fprintf(fptr,"Year: %d\n", dt.year);
 
     fputs("---Income and Expenses---\n",fptr);
@@ -112,3 +113,4 @@ int main()
     return 0;
 }
     
+
