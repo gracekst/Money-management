@@ -4,6 +4,9 @@
 #include<stdbool.h>
 #include <time.h>
 int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2);
+void print_table(double income, double expenses, double extra, double savings, char* chart);
+void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month);
+void chart_generator(double income, double expenses, double save_pmonth[], int size, char* chart, int start_month);
 
 // necessay information
 struct date
@@ -217,6 +220,20 @@ int main()
         printf("Please extend the deadline\n");
     }
     
+    //open output file and print table and piechart
+    FILE *chart;
+    chart = fopen("chart.html", "w");
+    fprintf(chart,"<!DOCTYPE HTML>\n");
+    fprintf(chart,"<html>\n");
+    fprintf(chart,"<head>\n");
+    fprintf(chart,"<title>Money management-Pie chart</title>\n");
+    int size = sizeof(save_pmonth)/sizeof(save_pmonth[0]);
+    print_table(uinfo.income/30, uinfo.expense/30, (uinfo.income/30)-save_pday, save_pday, chart);
+    fprintf(chart,"<br></br>\n");
+    chart_generator(uinfo.income, uinfo.expense, save_pmonth, size, chart, todayMonth);
+    fprintf(chart,"</body></html>");
+    fclose(chart);
+    
     return 0;
 }
 
@@ -262,4 +279,148 @@ int day_between_date_today(int day1, int month1, int year1, int day2, int month2
 
     //return amount of days between two dates
     return diff_day;
+}
+
+//printing table of savings per day
+void print_table(double income, double expenses, double extra, double savings, char* chart)
+{
+    fprintf(chart,"<style>\n");
+    fprintf(chart,"h1{color: black; font-size: 30px; display: flex; justify-content: center;}");
+    fprintf(chart,"h2{color: #7C743C; font-size: 25px; display: flex; justify-content: center;}");
+    fprintf(chart,"table, td, tr{border: 1px solid black; height: 70px; text-align: center;}\n");
+    fprintf(chart,"table{width: 100%%; border-collapse: collapse; margin-right: auto; width: 100%%}");
+    fprintf(chart,"</style></head><body>\n");
+
+    fprintf(chart,"<h1>Money management</h1>\n");
+    fprintf(chart,"<h2>Approximate amount of savings per day</h2>\n");
+    fprintf(chart,"<table>\n");
+    fprintf(chart,"<tr><td>Income</td>\n");
+    fprintf(chart,"<td>%.2lf</td></tr>\n", income);
+    fprintf(chart,"<tr><td>Expenses</td>\n");
+    fprintf(chart,"<td>%.2lf</td></tr>\n", expenses);
+    fprintf(chart,"<tr><td>Extra money</td>\n");
+    fprintf(chart,"<td>%.2lf</td></tr>\n", extra);
+    fprintf(chart,"<tr><td>Savings</td>\n");
+    fprintf(chart,"<td>%.2lf</td></tr>\n", savings);
+    fprintf(chart,"</table>\n");
+}
+
+//printing piechart for each month
+void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month)
+{
+    //calculate the proportion on piechart for each part
+    double percent_expenses = (expenses/income)*360;
+    double percent_extra = (extra/income)*360;
+    double percent_savings = (savings/income)*360;
+
+    double green, blue, yellow;
+    char g, b, y;
+
+    //find the value of each parts in html css pie chart
+    if (percent_expenses <= percent_extra && percent_expenses <= percent_savings){
+        green = percent_expenses;
+        g = 'e';
+        if(percent_extra <= percent_savings){
+            blue = percent_extra+percent_expenses;
+            b = 'x';
+            yellow = percent_savings+percent_extra+percent_expenses;
+            y = 's';
+        }
+        else{
+            blue = percent_savings+percent_expenses;
+            b = 's';
+            yellow = percent_extra+percent_savings+percent_expenses;
+            y = 'x';
+        }
+    }
+    else if (percent_extra <= percent_expenses && percent_extra <= percent_savings){
+        green = percent_extra;
+        g = 'x';
+        if(percent_expenses <= percent_savings){
+            blue = percent_expenses+percent_extra;
+            b = 'e';
+            yellow = percent_savings+percent_expenses+percent_extra;
+            y = 's';
+        }
+        else{
+            blue = percent_savings+percent_extra;
+            b = 's';
+            yellow = percent_expenses+percent_savings+percent_extra;
+            y = 'e';
+        }
+    }
+    else{
+        green = percent_savings;
+        g = 's';
+        if(percent_extra <= percent_expenses){
+            blue = percent_extra+percent_savings;
+            b = 'x';
+            yellow = percent_expenses+percent_extra+percent_savings;
+            y = 'e';
+        }
+        else{
+            blue = percent_expenses+percent_savings;
+            b = 'e';
+            yellow = percent_extra+percent_expenses+percent_savings;
+            y = 'x';
+        }
+    }
+
+    //printing html code to a file
+    fprintf(chart,"<style>\n");
+    fprintf(chart,"body{background-color: #FBF8DD}\n");
+    fprintf(chart,".piechart\n");
+    fprintf(chart,"{border-radius: 50%% ;margin-top: 50px; margin-left: 300px; display: inline-block;");
+    fprintf(chart,"position: absolute; width: 300px;height: 300px;");
+    fprintf(chart,"background-image: conic-gradient");
+    fprintf(chart,"(#5C9215 %lfdeg,#1CA2A3 0 %lfdeg,#B4AF21 0 %lfdeg);}", green, blue, yellow);
+    fprintf(chart,"h3{color: #7C743C; font-size: 25px; display: flex; justify-content: center;text-decoration: underline;}");
+    fprintf(chart,".income{font-size: 20px; display: flex; margin-top:70px; margin-left: 1100px;}");
+
+    if(g == 'e')
+        fprintf(chart,".expenses\n");
+    else if (g == 'x')
+        fprintf(chart,".extra\n");
+    else
+        fprintf(chart,".savings\n");
+    fprintf(chart,"{color: #5C9215; font-size: 20px; display: flex; margin-top:50px; margin-left: 1100px;}\n");
+
+    if(b == 'e')
+        fprintf(chart,".expenses\n");
+    else if (b == 'x')
+        fprintf(chart,".extra\n");
+    else
+        fprintf(chart,".savings\n");
+    fprintf(chart,"{color: #1CA2A3; font-size: 20px; display: flex; margin-top:50px; margin-left: 1100px;}\n");
+
+    if(y == 'e')
+        fprintf(chart,".expenses\n");
+    else if (y == 'x')
+        fprintf(chart,".extra\n");
+    else
+        fprintf(chart,".savings\n");
+    fprintf(chart,"{color: #B4AF21; font-size: 20px; display: flex; margin-top:50px; margin-left: 1100px;}\n");
+
+    fprintf(chart,"</style></head><body>");
+    fprintf(chart,"<h3>Month %d</h3><div class=\"piechart\"></div>", start_month);
+    fprintf(chart,"<div class=\"income\">Income: %.2lf</div>", income);
+    fprintf(chart,"<div class=\"expenses\">Expenses: %.2lf (%.2lf%%)</div>", expenses, expenses/income*100);
+    fprintf(chart,"<div class=\"extra\">Extra money: %.2lf (%.2lf%%)</div>", extra, extra/income*100);
+    fprintf(chart,"<div class=\"savings\">Savings: %.2lf (%.2lf%%)</div>", savings, savings/income*100);
+
+}
+
+void chart_generator(double income, double expenses, double save_pmonth[], int size, char* chart, int start_month)
+{
+    //loop over a month and print html piechart code by calling function
+    int month_count = start_month-1;
+    for(int i = 0; i < size; i++)
+    {
+        if (month_count == 13)
+            month_count = 1;
+        double extra_money = income-expenses-save_pmonth[i];
+        print_chart(income, expenses, extra_money, save_pmonth[i], chart, month_count);
+        fprintf(chart,"<br></br><br></br><br></br><br></br>");
+        month_count++;
+    }
 }
