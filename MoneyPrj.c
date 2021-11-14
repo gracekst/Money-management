@@ -3,6 +3,7 @@
 #include<string.h>
 #include<stdbool.h>
 #include <time.h>
+int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2);
 
 // necessay information
 struct date
@@ -25,55 +26,9 @@ struct item_info
     int amount;
     double price;
 };
-
-//find days between two dates
-int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2)
-{
-    //struct tm range of tm_mon = 0-11
-    --month1;
-    --month2;
-
-    //year in struct tm is count from 1900 | for 1901 tm_year = 1
-    year1 -= 1900;
-    year2 -= 1900;
-
-    time_t day1_t, day2_t;
-    struct tm day1_date,day2_date;
-
-    //assign time
-    time(&day1_t);
-    time(&day2_t);
-
-    //assign time to struct
-    day1_date = *localtime(&day1_t);
-    day2_date = *localtime(&day2_t);
-
-    //change date month and year
-    day1_date.tm_mday = day1;
-    day1_date.tm_mon = month1;
-    day1_date.tm_year = year1;
-
-    day2_date.tm_mday = day2;
-    day2_date.tm_mon = month2;
-    day2_date.tm_year = year2;
-
-    //change information in struct to sec 
-    day1_t = mktime(&day1_date);
-    day2_t = mktime(&day2_date);
-
-    //find different sec and day between two dates
-    int diff_sec, diff_day;
-    diff_sec = difftime(day2_t,day1_t);
-    diff_day = diff_sec / (60*60*24);
-
-    //return amount of days between two dates
-    return diff_day;
-}
     
 int main()
 {   
-
-    char save_type[50];
 
     // opening a file
     FILE *fptr = fopen("MoneyProject.txt", "w+");
@@ -263,4 +218,48 @@ int main()
     }
     
     return 0;
+}
+
+//find days between two dates
+int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2)
+{
+    //struct tm range of tm_mon = 0-11
+    --month1;
+    --month2;
+
+    //year in struct tm is count from 1900 | for 1901 tm_year = 1
+    year1 -= 1900;
+    year2 -= 1900;
+
+    time_t day1_t, day2_t;
+    struct tm day1_date,day2_date;
+
+    //assign time
+    time(&day1_t);
+    time(&day2_t);
+
+    //assign time to struct
+    day1_date = *localtime(&day1_t);
+    day2_date = *localtime(&day2_t);
+
+    //change date month and year
+    day1_date.tm_mday = day1;
+    day1_date.tm_mon = month1;
+    day1_date.tm_year = year1;
+
+    day2_date.tm_mday = day2;
+    day2_date.tm_mon = month2;
+    day2_date.tm_year = year2;
+
+    //change information in struct to sec 
+    day1_t = mktime(&day1_date);
+    day2_t = mktime(&day2_date);
+
+    //find different sec and day between two dates
+    int diff_sec, diff_day;
+    diff_sec = difftime(day2_t,day1_t);
+    diff_day = diff_sec / (60*60*24);
+
+    //return amount of days between two dates
+    return diff_day;
 }
