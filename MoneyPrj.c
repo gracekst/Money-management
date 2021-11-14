@@ -4,6 +4,7 @@
 #include<stdbool.h>
 #include <time.h>
 #include <math.h>
+#include <limits.h>
 
 // necessay information
 struct date
@@ -16,15 +17,15 @@ struct date
 
 struct user_info
 {
-    int income;
-    int expense;
+    double income;
+    double expense;
 
 };
 
 struct item_info
 {   
     int amount;
-    int price;
+    double price;
 };
 
 //find days between two dates
@@ -70,30 +71,10 @@ int day_between_date_today(int day1, int month1, int year1, int day2, int month2
     //return amount of days between two dates
     return diff_day;
 }
-
-//money to save per day
-double daily_save(int days, double money)
-{
-    double save_pday;
-
-    //calculate amount per day
-    save_pday = money / days;
-
-    return save_pday;
-}
-
-//money to save per week
-double weekly_save(int week, double money)
-{
-    double save_pweek;
-
-    save_pweek = money / week;
-    return save_pweek;
-}
     
 int main()
 {   
-    bool week = false;
+    bool week_bool = false;
 
     char save_type[50];
 
@@ -128,14 +109,14 @@ int main()
     struct user_info uinfo;
 
     printf("Enter your income per month: ");
-    scanf("%d", &uinfo.income);
+    scanf("%lf", &uinfo.income);
 
     printf("Enter your expenses per month: ");
-    scanf("%d", &uinfo.expense);
+    scanf("%lf", &uinfo.expense);
 
-    int ext_money;
+    double ext_money;
     ext_money = uinfo.income - uinfo.expense;
-    printf("Extra money from expenses: %d \n", ext_money);
+    printf("Extra money from expenses: %.2lf \n", ext_money);
 
 
     //asks the price of itmes you want to buy
@@ -154,47 +135,26 @@ int main()
     fprintf(fptr,"Year: %d\n", dt.year);
 
     fputs("---Income and Expenses---\n",fptr);
-    fprintf(fptr,"Monthly Income: %d\n", uinfo.income);
-    fprintf(fptr,"Monthly Expense: %d\n", uinfo.expense);
-    fprintf(fptr,"Extra Money: %d\n", ext_money);
+    fprintf(fptr,"Monthly Income: %.2lf\n", uinfo.income);
+    fprintf(fptr,"Monthly Expense: %.2lf\n", uinfo.expense);
+    fprintf(fptr,"Extra Money: %.2lf\n", ext_money);
 
     fputs("---Items and their price---\n", fptr);
     fprintf(fptr,"Amount of items: %d\n", itm_info.amount);
 
     int i = 0;
-    int total_price = 0;
+    double total_price = 0;
     for(i = 1; i <= itm_info.amount; i++)
     {   
         printf("Enter the price for item %d:", i);
         fprintf(fptr, "The price for item %d:", i);
-        scanf("%d", &itm_info.price);
-        fprintf(fptr, "%d\n", itm_info.price);
+        scanf("%lf", &itm_info.price);
+        fprintf(fptr, "%.2lf\n", itm_info.price);
         total_price = total_price + itm_info.price;
     }
 
-    printf("The total price for all items: %d\n", total_price);
-    fprintf(fptr,"The total price for all itmes: %d\n", total_price);
-
-    while(1)
-    {
-        printf("How would you like to save? (type week/day): ");
-        scanf("%s", &save_type);
-
-        if(strcmp(save_type,"week") == 0)
-        {
-            week = true;
-            break;
-        }
-        else if (strcmp(save_type,"day") == 0)
-        {
-            week = false;
-            break;
-        }
-        else
-        {
-            printf("Erro, please try agian.\n");
-        }
-    }
+    printf("The total price for all items: %.2lf\n", total_price);
+    fprintf(fptr,"The total price for all itmes: %.2lf\n", total_price);
 
     time_t today;
     time(&today);
@@ -203,26 +163,36 @@ int main()
     int todayMonth = today_s.tm_mon + 1;
     int todayYear = today_s.tm_year + 1900;
 
+    //how many days left
     int days = day_between_date_today(today_s.tm_mday, todayMonth, todayYear, dt.day, dt.month, dt.year);
 
+    /*how many days in each month*/
+    //how many month
     int m,f,s;
     if(todayYear == dt.year)
     {
-        m = dt.month - todayMonth;
+        if(todayMonth != 12)
+        {
+            m = (dt.month - todayMonth)+1;
+        }
+        else
+        {
+            m = 1;
+        }
     }
     else
     {
         f = (12 - todayMonth) + 1;
-        s = dt.month - 1;
+        s = dt.month;
         m = f+s;
     }
 
+    //days in each month
     int dayEachMonth[m];
-
     if(todayYear == dt.year)
     {
         int x = 0;
-        for(int i = todayMonth; i < dt.month; i++)
+        for(int i = todayMonth; i <= dt.month; i++)
         {
             dayEachMonth[x++] = day_between_date_today(1,i,todayYear,1,i+1,dt.year);
         }
@@ -236,87 +206,64 @@ int main()
         }
         dayEachMonth[i++] = day_between_date_today(1,todayMonth,todayYear,1,1,dt.year);
         int jan = 1;
-        for(int x = 0; x < s; x++)
+        for(int x = 0; x <= s; x++)
         {
             dayEachMonth[i++] = day_between_date_today(1,jan++,dt.year,1,jan+1,dt.year);
         }
     }
 
-    double price_type[2];
-    double price = total_price;
-    int howManyMonth = 0;
-    int aMonth = m;
-    int dDay = days;
-    int x = 0;
-    while(price > 0)
+    //find largest days
+    int first_mon_day = dayEachMonth[0] - today_s.tm_mday;
+    int last_mon_day = dt.day;
+
+    //how much to save
+    double save_pday, save_pmonth[m], largest_value = 0;
+    //see if total price excess money left(every month)
+    if(total_price < (ext_money*m))
     {
-        if(price > ext_money && dDay > dayEachMonth[x])
+        //save per day
+        save_pday = total_price / days;
+    
+        //save per month
+        for(int p = 0; p < m; p++)
         {
-            price_type[0] = ext_money;
-            price -= ext_money;
-            dDay -= dayEachMonth[x++];
-            howManyMonth++;
-            aMonth--;
-        }
-        else
-        {
-            price_type[1] = price;
-            break;
-        }
-    }
-
-    double save[2];
-    int dayLeft = days;
-    int weekLeft;
-    int totalday = 0;
-    int totalweek;
-
-    if(aMonth > 0)
-    {
-        for(int j = 0; j < howManyMonth; j++)
-        {
-            dayLeft -= dayEachMonth[j];
-            totalday += dayEachMonth[j];
+            if(p == 0)
+            {
+                save_pmonth[p] = save_pday * first_mon_day;
+            }
+            else if(p == (m-1))
+            {
+                save_pmonth[p] = save_pday * last_mon_day;
+            }
+            else
+            {
+                save_pmonth[p] = save_pday *dayEachMonth[p];
+            }
         }
 
-        if(week == true)
+        //find the largest values that user need to save per month
+        for(int p = 0; p < m; p++)
         {
-            totalweek = totalday / 7;
-            weekLeft = (dayLeft + (totalday % 7)) / 7;
+            if(save_pmonth[p] > largest_value)
+            {
+                largest_value = save_pmonth[p];
+            }
+        }
 
-            save[0] = weekly_save(totalweek, price_type[0]) ;
-            save[1] = weekly_save(weekLeft, price_type[1]);
-        }
-        else
+        //if the value is more than money has left
+        if(largest_value > ext_money)
         {
-            save[0] = daily_save(totalday, price_type[0]);
-            save[1] = daily_save(dayLeft, price_type[1]);
-        }
-    }
-    else if(aMonth == 0 && days == dayEachMonth[0])
-    {
-        if(week == true)
-        {
-            totalweek = days / 7;
-
-            save[0] = weekly_save(totalweek, price_type[0]) ;
-        }
-        else
-        {
-            save[0] = daily_save(days, price_type[0]);
+            save_pday = 0;
+            for(int p = 0; p < m; p++)
+            {
+                save_pmonth[p] = 0;
+            }
+            printf("Please exten the deadline\n");
         }
     }
     else
     {
-        printf("Invalid date");
-    }
-
-    printf("%lf %lf %lf %d %d %d %d\n",price_type[0], price_type[1],price,howManyMonth,aMonth,dDay,x);
-    printf("%lf %lf %d %d %d %d\n",save[0],save[1],dayLeft,weekLeft,totalday,totalweek);
-    printf("%d %d\n ",days, m);
-    for(int i = 0; i < m; i++)
-    {
-        printf("%d ", dayEachMonth[i]);
+        printf("Please exten the deadline\n");
     }
     
     return 0;
