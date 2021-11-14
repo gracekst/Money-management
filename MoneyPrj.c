@@ -3,8 +3,6 @@
 #include<string.h>
 #include<stdbool.h>
 #include <time.h>
-#include <math.h>
-#include <limits.h>
 
 // necessay information
 struct date
@@ -74,7 +72,6 @@ int day_between_date_today(int day1, int month1, int year1, int day2, int month2
     
 int main()
 {   
-    bool week_bool = false;
 
     char save_type[50];
 
@@ -212,7 +209,6 @@ int main()
         }
     }
 
-    //find largest days
     int first_mon_day = dayEachMonth[0] - today_s.tm_mday;
     int last_mon_day = dt.day;
 
