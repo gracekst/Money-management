@@ -413,7 +413,7 @@ void print_chart(double income, double expenses, double extra, double savings, c
 void chart_generator(double income, double expenses, double save_pmonth[], int size, char* chart, int start_month)
 {
     //loop over a month and print html piechart code by calling function
-    int month_count = start_month-1;
+    int month_count = start_month;
     for(int i = 0; i < size; i++)
     {
         if (month_count == 13)
