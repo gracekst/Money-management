@@ -123,7 +123,7 @@ int main()
 
     /*how many days in each month*/
     //how many month
-    int m,f,s;
+    int m;
     if(todayYear == dt.year)
     {
         if(todayMonth != 12)
@@ -136,11 +136,21 @@ int main()
         }
     }
     else
-    {
-        f = (12 - todayMonth) + 1;
-        s = dt.month;
-        m = f+s;
-    }
+        for(int year = todayYear; year <= dt.year; year++)
+        {
+            if(year == todayYear)
+            {
+                m = m + (12 - todayMonth) +1;
+            }
+            else if(year == dt.year)
+            {
+                m = m + dt.month;
+            }
+            else
+            {
+                m = m+12;
+            }
+        }
 
     //days in each month
     int dayEachMonth[m];
@@ -155,15 +165,31 @@ int main()
     else
     {
         int i = 0;
-        for(int x = 0; x < f-1; x++)
+        for(int year = todayYear; year <= dt.year; year++)
         {
-            dayEachMonth[i++] = day_between_date_today(1,todayMonth++,todayYear,1,todayMonth+1,todayYear); 
-        }
-        dayEachMonth[i++] = day_between_date_today(1,todayMonth,todayYear,1,1,dt.year);
-        int jan = 1;
-        for(int x = 0; x <= s; x++)
-        {
-            dayEachMonth[i++] = day_between_date_today(1,jan++,dt.year,1,jan+1,dt.year);
+            if(year == todayYear)
+            {
+                for(int x = todayMonth; x < 12; x++)
+                {
+                    dayEachMonth[i++] = day_between_date_today(1,x,year,1,x+1,year);
+                }
+                dayEachMonth[i++] = day_between_date_today(1,12,year,1,1,year+1);
+            }
+            else if(year == dt.year)
+            {
+                for(int x = 1; x <= dt.month; x++)
+                {
+                    dayEachMonth[i++] = day_between_date_today(1,x,year,1,x+1,year);
+                }
+            }
+            else
+            {
+                for(int x = 1; x < 12; x++)
+                {
+                    dayEachMonth[i++] = day_between_date_today(1,x,year,1,x+1,year);
+                }
+                dayEachMonth[i++] = day_between_date_today(1,12,year,1,1,year+1);
+            }
         }
     }
 
