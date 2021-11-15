@@ -5,7 +5,7 @@
 #include <time.h>
 int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2);
 void print_table(double income, double expenses, double extra, double savings, char* chart);
-void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month);
+void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month, int count);
 void chart_generator(double income, double expenses, double save_pmonth[], int size, char* chart, int start_month);
 
 // necessay information
@@ -306,7 +306,7 @@ void print_table(double income, double expenses, double extra, double savings, c
 }
 
 //printing piechart for each month
-void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month)
+void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month, int count)
 {
     //calculate the proportion on piechart for each part
     double percent_expenses = (expenses/income)*360;
@@ -369,7 +369,7 @@ void print_chart(double income, double expenses, double extra, double savings, c
     //printing html code to a file
     fprintf(chart,"<style>\n");
     fprintf(chart,"body{background-color: #FBF8DD}\n");
-    fprintf(chart,".piechart\n");
+    fprintf(chart,".piechart%d\n", count);
     fprintf(chart,"{border-radius: 50%% ;margin-top: 50px; margin-left: 300px; display: inline-block;");
     fprintf(chart,"position: absolute; width: 300px;height: 300px;");
     fprintf(chart,"background-image: conic-gradient");
@@ -402,7 +402,7 @@ void print_chart(double income, double expenses, double extra, double savings, c
     fprintf(chart,"{color: #B4AF21; font-size: 20px; display: flex; margin-top:50px; margin-left: 1100px;}\n");
 
     fprintf(chart,"</style></head><body>");
-    fprintf(chart,"<h3>Month %d</h3><div class=\"piechart\"></div>", start_month);
+    fprintf(chart,"<h3>Month %d</h3><div class=\"piechart%d\"></div>", start_month, count);
     fprintf(chart,"<div class=\"income\">Income: %.2lf</div>", income);
     fprintf(chart,"<div class=\"expenses\">Expenses: %.2lf (%.2lf%%)</div>", expenses, expenses/income*100);
     fprintf(chart,"<div class=\"extra\">Extra money: %.2lf (%.2lf%%)</div>", extra, extra/income*100);
@@ -419,7 +419,7 @@ void chart_generator(double income, double expenses, double save_pmonth[], int s
         if (month_count == 13)
             month_count = 1;
         double extra_money = income-expenses-save_pmonth[i];
-        print_chart(income, expenses, extra_money, save_pmonth[i], chart, month_count);
+        print_chart(income, expenses, extra_money, save_pmonth[i], chart, month_count, i);
         fprintf(chart,"<br></br><br></br><br></br><br></br>");
         month_count++;
     }
