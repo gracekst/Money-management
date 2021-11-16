@@ -4,9 +4,9 @@
 #include<stdbool.h>
 #include <time.h>
 int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2);
-void print_table(double income, double expenses, double extra, double savings, char* chart);
-void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month, int count);
-void chart_generator(double income, double expenses, double save_pmonth[], int size, char* chart, int start_month);
+void print_table(double income, double expenses, double extra, double savings, FILE* chart);
+void print_chart(double income, double expenses, double extra, double savings, FILE* chart, int start_month, int count);
+void chart_generator(double income, double expenses, double save_pmonth[], int size, FILE* chart, int start_month);
 
 // necessay information
 struct date
@@ -308,7 +308,7 @@ int day_between_date_today(int day1, int month1, int year1, int day2, int month2
 }
 
 //printing table of savings per day
-void print_table(double income, double expenses, double extra, double savings, char* chart)
+void print_table(double income, double expenses, double extra, double savings, FILE* chart)
 {
     fprintf(chart,"<style>\n");
     fprintf(chart,"h1{color: black; font-size: 30px; display: flex; justify-content: center;}");
@@ -332,7 +332,7 @@ void print_table(double income, double expenses, double extra, double savings, c
 }
 
 //printing piechart for each month
-void print_chart(double income, double expenses, double extra, double savings, char* chart, int start_month, int count)
+void print_chart(double income, double expenses, double extra, double savings, FILE* chart, int start_month, int count)
 {
     //calculate the proportion on piechart for each part
     double percent_expenses = (expenses/income)*360;
@@ -436,7 +436,7 @@ void print_chart(double income, double expenses, double extra, double savings, c
 
 }
 
-void chart_generator(double income, double expenses, double save_pmonth[], int size, char* chart, int start_month)
+void chart_generator(double income, double expenses, double save_pmonth[], int size, FILE* chart, int start_month)
 {
     //loop over a month and print html piechart code by calling function
     int month_count = start_month;
