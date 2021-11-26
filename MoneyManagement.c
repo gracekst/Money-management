@@ -108,9 +108,7 @@ int main()
         printf("Details of important item %d\n", i+1);
         printf("Name:%s\tPrice:%.2lf\n", imp[i].name, imp[i].price);
         totalp_imp = totalp_imp + imp[i].price;
-    }
-
-    
+    } 
     printf("Total price of important items: %.2lf\n", totalp_imp);
 
     printf("\n");
@@ -121,8 +119,6 @@ int main()
         printf("Name:%s\tPrice:%.2lf\n", un_imp[j].name, un_imp[j].price);
         totalp_unimp = totalp_unimp + un_imp[j].price;
     }
-
-    
     printf("Total price for unimportant items: %.2lf", totalp_unimp);
 
 
