@@ -14,7 +14,7 @@ int main() {
     struct item imp[2];
     strcpy("Ipad", imp[0].name);
     imp[0].price = 20000;
-    strcpy("Calculator", imp[0].name);
+    strcpy("Calculator", imp[1].name);
     imp[1].price = 850;
 
     int *n = imp_count_day(&imp[2], 2, 28, 11, 2021, 10000, 5000);
