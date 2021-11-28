@@ -4,7 +4,7 @@
 struct tm buying_date(int day, int month, int year, int num);
 
 //find days between two dates
-int day_between_date_today(int day1, int month1, int year1, int day2, int month2 ,int year2)
+int day_between_date(int day1, int month1, int year1, int day2, int month2 ,int year2)
 {
     time_t day1_t, day2_t;
     struct tm day1_date,day2_date;
@@ -30,12 +30,9 @@ int day_between_date_today(int day1, int month1, int year1, int day2, int month2
     day1_t = mktime(&day1_date);
     day2_t = mktime(&day2_date);
 
-    printf("%d %d",day1_t, day2_t);
-
     //find different sec and day between two dates
     int diff_sec, diff_day;
     diff_sec = difftime(day2_t,day1_t);
-    printf("\n%d",diff_sec);
     diff_day = diff_sec / (60*60*24);
 
     //return amount of days between two dates | plus 1 for including the last date
@@ -44,7 +41,7 @@ int day_between_date_today(int day1, int month1, int year1, int day2, int month2
 
 int main()
 {
-    int k = day_between_date_today(25,11,2021,28,11,2021);
+    int k = day_between_date(25,11,2021,28,11,2021);
     printf("\n%d\n",k);
     struct tm buy = buying_date(25,11,2021,4);
     printf("%d/%d/%d", buy.tm_mday, buy.tm_mon, buy.tm_year);
