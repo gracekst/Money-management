@@ -126,7 +126,9 @@ int main()
     }
     printf("Total price for unimportant items: %.2lf", totalp_unimp);
 
-
+    if(ext_money <= 0)
+        printf("unable to buy any items\n");
+    
     time_t today;
     time(&today);
     struct tm today_s;
@@ -198,6 +200,10 @@ int main()
     fprintf(file,"</table>\n");
 
     fclose(file);
+    
+    int delay = day_between_date(dl.day, dl.month, dl.year, unimp_buy_date.tm_mday,unimp_buy_date.tm_mon,unimp_buy_date.tm_year);
+    if(unimp_buy_date.tm_year > dl.year)
+        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
 
     return 0;
 }
