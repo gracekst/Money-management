@@ -4,6 +4,8 @@
 #include <time.h>
 int day_between_date(int day1, int month1, int year1, int day2, int month2 ,int year2);
 struct tm buying_date(int day, int month, int year, int num);
+int count_day(double price, double *price_pt, int today_day, int today_month, int today_year, double income, double expenses);
+void print_table(char name[], int day, int month, int year, FILE *file);
 
 struct deadline
 {
@@ -131,7 +133,71 @@ int main()
     today_s = *localtime(&today);
     int todayMonth = today_s.tm_mon + 1;
     int todayYear = today_s.tm_year + 1900;
+    
+    //important items
+    int total_imp_day[amt1];
+    double remainder = 0;
+    for(int k = 0; k < amt1; k++)
+    {
+        if(k != 0)
+            remainder = imp[k-1].price;
+        int imp_day = 0;
+        imp_day = count_day((imp[k].price)-remainder, &imp[k].price, today_s.tm_mday, todayMonth, todayYear, uinfo.income, uinfo.expense);
+        if(remainder != 0)
+            imp_day++;
+        total_imp_day[k] = imp_day;
+    }
+    //non-important items
+    double tmp_unimp = totalp_unimp;
+    int un_imp_day = count_day(tmp_unimp, &tmp_unimp, today_s.tm_mday, todayMonth, todayYear, uinfo.income, uinfo.expense);
 
+    FILE* file = fopen("file.html", "w");
+    fprintf(file,"<style>\n");
+    fprintf(file,"body{background-color: #FBF8DD}\n");
+    fprintf(file,"h1{color: black; font-size: 30px; display: flex; justify-content: center;}");
+    fprintf(file,"h2{color: #7C743C; font-size: 25px; display: flex; justify-content: center;}");
+    fprintf(file,"table, td, tr{border: 1px solid black; height: 70px; text-align: center;}\n");
+    fprintf(file,"table{width: 100%%; border-collapse: collapse; margin-right: auto; width: 100%%}");
+    fprintf(file,"</style></head><body>\n");
+
+    fprintf(file,"<h1>Money management</h1>\n");
+    fprintf(file,"<h2>Savings per month</h2>\n");
+    fprintf(file,"<table>\n");
+    fprintf(file,"<tr><td>Income</td>\n");
+    fprintf(file,"<td>%.2lf</td></tr>\n", uinfo.income);
+    fprintf(file,"<tr><td>Expenses</td>\n");
+    fprintf(file,"<td>%.2lf</td></tr>\n", uinfo.expense);
+    fprintf(file,"<tr><td>Savings</td>\n");
+    fprintf(file,"<td>%.2lf</td></tr>\n", uinfo.income-uinfo.expense);
+    fprintf(file,"</table>\n<br></br><br></br>");
+
+    fprintf(file,"<h2>Item name and date that can be bought for important item</h2>\n");
+    fprintf(file,"<table>\n");
+    fprintf(file,"<tr><td>Name</td>\n");
+    fprintf(file,"<td>Date</td></tr>\n");
+
+    struct tm imp_buy_date[amt1];
+    imp_buy_date[0] = buying_date(today_s.tm_mday, todayMonth, todayYear, total_imp_day[0]);
+    print_table(imp[0].name, imp_buy_date[0].tm_mday, imp_buy_date[0].tm_mon, imp_buy_date[0].tm_year, file);
+    for(int l = 1; l < amt1; l++)
+    {
+        imp_buy_date[l] = buying_date(imp_buy_date[l-1].tm_mday, imp_buy_date[l-1].tm_mon, imp_buy_date[l-1].tm_year, total_imp_day[l]);
+        print_table(imp[l].name, imp_buy_date[l].tm_mday, imp_buy_date[l].tm_mon, imp_buy_date[l].tm_year, file);
+    }
+    fprintf(file,"</table>\n");
+
+    fprintf(file,"<h2>Item name and date that can be bought for unimportant item</h2>\n");
+    fprintf(file,"<table>\n");
+    fprintf(file,"<tr><td>Name</td>\n");
+    fprintf(file,"<td>Date</td></tr>\n");
+    struct tm unimp_buy_date = buying_date(imp_buy_date[amt1-1].tm_mday,imp_buy_date[amt1-1].tm_mon,imp_buy_date[amt1-1].tm_year, un_imp_day);
+    for(int l = 1; l < amt2; l++)
+    {
+        print_table(un_imp[l].name, unimp_buy_date.tm_mday, unimp_buy_date.tm_mon, unimp_buy_date.tm_year, file);
+    }
+    fprintf(file,"</table>\n");
+
+    fclose(file);
 
     return 0;
 }
@@ -197,4 +263,78 @@ struct tm buying_date(int day, int month, int year, int num)
 
     // return struct tm
     return buying_date_struct;
+}
+
+int count_day(double price, double *price_pt, int today_day, int today_month, int today_year, double income, double expenses)
+{
+    int day = 0;
+    int month_day[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    int fm = day_between_date(today_day, today_month, today_year, month_day[today_month-1], today_month, today_year);
+    //saving per day for each month
+    double saving = income - expenses;
+    double month_saving[4] = {saving/28, saving/29, saving/30, saving/31};
+
+    //check for leap year
+    if(today_year % 4 == 0 && today_year % 100 != 0)
+        month_day[1] = 29;
+    else
+        month_day[1] = 28;
+
+    int j = 0;
+    while(price > 0)
+    {
+        //checking for the end for a year
+        if(today_month == 13)
+        {
+            today_month = 1;
+            //check for leap year
+            today_year++;
+            if(today_year % 4 == 0 && today_year % 100 != 0)
+                month_day[1] = 28;
+            else
+                month_day[1] = 29;
+        }
+
+        int current_month = (month_day[today_month-1]);
+        double current_month_saving;
+        if(current_month == 28)
+            current_month_saving = month_saving[0];
+        else if(current_month == 29)
+            current_month_saving = month_saving[1];
+        else if(current_month == 30)
+            current_month_saving = month_saving[2];
+        else if(current_month == 31)
+            current_month_saving = month_saving[3];
+
+        int k = 0;
+        if(j == 0)
+        {
+            while(k < fm && price > 0)
+            {
+                price -= current_month_saving;
+                day++;
+                k++;
+            }
+        }
+        else
+        {
+            while(k < current_month && price > 0)
+            {
+                price -= current_month_saving;
+                day++;
+                k++;
+            }
+        }
+        today_month++;
+        j++;
+    }
+    *price_pt = price;
+    return day;
+}
+
+void print_table(char name[], int day, int month, int year, FILE *file)
+{
+    fprintf(file,"<tr><td>%s</td>\n", name);
+    fprintf(file,"<td>%d/ %d/ %d</td></tr>\n", day, month, year);
 }
