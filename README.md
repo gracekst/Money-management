@@ -1,7 +1,6 @@
 # Money-management
--This program will get input from the user to calculate amount of money that the user need to save per day or week, depend on the user to choose.  
--Users need to put information about their income, expenses, and price of things that they want to buyer calculate days and money that they have to save for buying those items.  
--The user can put the list of what they want to buy and when they want to buy it, and if they change number of days and the items to the list, the program will recalculate and give a new value of saving.  
+-This program will ask for users’ monthly income and expenses to calculate for the nearest date users can save money and buy the item they want. Items in this program can be classified into 2 categories which are important items and unimportant items. Important item is an item users want to buy as soon as possible. Users will also be asked to prioritize the order of the items in these categories, so the most prioritized items will get calculated first. For unimportant items categories, all items will get calculated together at once.
+-Users will also be asked for a deadlines, they want to buy this items, and if their savings is not enough for buying items they want, program will also output a total date it needs to be delayed in order to buy those items.
 
 # Member
 1) Kasita Sansanthad 64011426  
