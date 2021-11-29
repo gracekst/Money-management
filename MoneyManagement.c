@@ -1,6 +1,4 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 #include <time.h>
 int day_between_date(int day1, int month1, int year1, int day2, int month2 ,int year2);
 struct tm buying_date(int day, int month, int year, int num);
