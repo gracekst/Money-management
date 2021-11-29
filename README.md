@@ -8,9 +8,9 @@ In this program we need 2 more libraby other than standard libraby that we norma
 \
 **Standard library**
   * stdio.h
-  * stdlib.h\
- \
-**Extra library**
+  * stdlib.h
+<!-- -->
+**Additional library**
   * string.h
   * time.h
 
@@ -28,9 +28,9 @@ the value of variable days is equal to ***99***
      * if date of the fist day that we start to save money is 15/11/2021 and we need only 1 day for buying an item.Thus, buying date will be the same with fisrt date
      * `struct tm buy = buying_date(29,11,2021,40);`\
     the result date is *7/11/2022*\
-    \
+  \
   **Remind**
-     * In usual, struct tm will return month in rang of 0-11 and year in 2xxx-1900, but for struct tm that is returning from this function,it already be in a normal form that we're using in our life
+    * In usual, struct tm will return month in rang of 0-11 and year in 2xxx-1900, but for struct tm that is returning from this function,it already be in a normal form that we're using in our life
 
 # Member
 1) Kasita Sansanthad 64011426  
