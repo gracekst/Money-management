@@ -33,8 +33,8 @@ the value of variable days is equal to ***99***
 3. `int count_day(double price, double *price_pt, int today_day, int today_month, int today_year, double income, double expenses);`  
 function that will return the total day of saving in order to buy specific item that be put in at a price parameter  
   
-`total_day = count_day(10000, &price_pt, 29, 11, 2021, 10000, 5000)`  
-the value of total_day will be ***34***  
+`  total_day = count_day(10000, &price_pt, 29, 11, 2021, 10000, 5000)`  
+   the value of total_day will be ***34***  
   
 4. `void print_table(char name[], int day, int month, int year, FILE *file)`  
 function that will printing a html code that generate a table to a file pointer that pass in to a function.
