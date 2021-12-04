@@ -4,7 +4,7 @@
 -Users will also be asked for a deadlines, they want to buy this items, and if their savings is not enough for buying items they want, program will also output a total date it needs to be delayed in order to buy those items.
 
 # Library
-In this program we need 2 more libraby other than standard libraby that we normally use in C\
+In this program we need 1 more libraby other than standard libraby that we normally use in C\
 \
 **Standard library**
   * stdio.h
