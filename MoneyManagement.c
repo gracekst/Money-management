@@ -207,13 +207,13 @@ int main()
             {
                 if(unimp_buy_date.tm_mon > dl.month)
                 {
-                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay-1);
                 }
                 else if(unimp_buy_date.tm_mon == dl.month)
                 {
                     if(unimp_buy_date.tm_mday > dl.day)
                     {
-                        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay-1);
                     }
                 }
             }
@@ -227,13 +227,13 @@ int main()
             {
                 if(imp_buy_date[amt1-1].tm_mon > dl.month)
                 {
-                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay-1);
                 }
                 else if(imp_buy_date[amt1-1].tm_mon == dl.month)
                 {
                     if(imp_buy_date[amt1-1].tm_mday > dl.day)
                     {
-                        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay-1);
                     }
                 }
             }
