@@ -211,7 +211,7 @@ int main()
             {
                 if(unimp_buy_date.tm_mday > dl.day)
                 {
-                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay-1);
                 }
             }
         }
