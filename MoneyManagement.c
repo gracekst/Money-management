@@ -142,7 +142,7 @@ int main()
         if(k != 0)
             remainder = imp[k-1].price;
         int imp_day = 0;
-        imp_day = count_day((imp[k].price)-remainder, &imp[k].price, today_s.tm_mday, todayMonth, todayYear, uinfo.income, uinfo.expense);
+        imp_day = count_day((imp[k].price)+remainder, &imp[k].price, today_s.tm_mday, todayMonth, todayYear, uinfo.income, uinfo.expense);
         if(remainder != 0)
             imp_day++;
         total_imp_day[k] = imp_day;
