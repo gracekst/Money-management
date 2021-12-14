@@ -191,7 +191,7 @@ int main()
     fprintf(file,"<tr><td>Name</td>\n");
     fprintf(file,"<td>Date</td></tr>\n");
     struct tm unimp_buy_date = buying_date(imp_buy_date[amt1-1].tm_mday,imp_buy_date[amt1-1].tm_mon,imp_buy_date[amt1-1].tm_year, un_imp_day);
-    for(int l = 1; l < amt2; l++)
+    for(int l = 0; l < amt2; l++)
     {
         print_table(un_imp[l].name, unimp_buy_date.tm_mday, unimp_buy_date.tm_mon, unimp_buy_date.tm_year, file);
     }
