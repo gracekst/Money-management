@@ -200,9 +200,22 @@ int main()
     fclose(file);
     
     int delay = day_between_date(dl.day, dl.month, dl.year, unimp_buy_date.tm_mday,unimp_buy_date.tm_mon,unimp_buy_date.tm_year);
-    if(unimp_buy_date.tm_mday > dl.day && unimp_buy_date.tm_mon >= dl.month && unimp_buy_date.tm_year >= dl.year)
-        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
-
+    if(unimp_buy_date.tm_year >= dl.year){
+        if(unimp_buy_date.tm_mon >= dl.month)
+        {
+            if(unimp_buy_date.tm_mon > dl.month)
+            {
+                printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+            }
+            else if(unimp_buy_date.tm_mon == dl.month)
+            {
+                if(unimp_buy_date.tm_mday > dl.day)
+                {
+                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                }
+            }
+        }
+    }
     return 0;
 }
 
