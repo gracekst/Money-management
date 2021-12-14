@@ -199,19 +199,42 @@ int main()
 
     fclose(file);
     
-    int delay = day_between_date(dl.day, dl.month, dl.year, unimp_buy_date.tm_mday,unimp_buy_date.tm_mon,unimp_buy_date.tm_year);
-    if(unimp_buy_date.tm_year >= dl.year){
-        if(unimp_buy_date.tm_mon >= dl.month)
-        {
-            if(unimp_buy_date.tm_mon > dl.month)
+    if(amt2 > 0)
+    {
+        int delay = day_between_date(dl.day, dl.month, dl.year, unimp_buy_date.tm_mday,unimp_buy_date.tm_mon,unimp_buy_date.tm_year);
+        if(unimp_buy_date.tm_year >= dl.year){
+            if(unimp_buy_date.tm_mon >= dl.month)
             {
-                printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
-            }
-            else if(unimp_buy_date.tm_mon == dl.month)
-            {
-                if(unimp_buy_date.tm_mday > dl.day)
+                if(unimp_buy_date.tm_mon > dl.month)
                 {
-                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay-1);
+                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                }
+                else if(unimp_buy_date.tm_mon == dl.month)
+                {
+                    if(unimp_buy_date.tm_mday > dl.day)
+                    {
+                        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        int delay = day_between_date(dl.day, dl.month, dl.year, imp_buy_date[amt1-1].tm_mday,imp_buy_date[amt1-1].tm_mon,imp_buy_date[amt1-1].tm_year);
+        if(imp_buy_date[amt1-1].tm_year >= dl.year){
+            if(imp_buy_date[amt1-1].tm_mon >= dl.month)
+            {
+                if(imp_buy_date[amt1-1].tm_mon > dl.month)
+                {
+                    printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                }
+                else if(imp_buy_date[amt1-1].tm_mon == dl.month)
+                {
+                    if(imp_buy_date[amt1-1].tm_mday > dl.day)
+                    {
+                        printf("\nDeadlines need need to be delayed by %d days, inorder to buy all items.\n", delay);
+                    }
                 }
             }
         }
