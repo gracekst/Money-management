@@ -331,9 +331,9 @@ int count_day(double price, double *price_pt, int today_day, int today_month, in
             //check for leap year
             today_year++;
             if(today_year % 4 == 0 && today_year % 100 != 0)
-                month_day[1] = 28;
-            else
                 month_day[1] = 29;
+            else
+                month_day[1] = 28;
         }
 
         int current_month = (month_day[today_month-1]);
